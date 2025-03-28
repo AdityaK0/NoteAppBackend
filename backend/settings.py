@@ -130,7 +130,7 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://postgres:icDaEzPrABlswTwTsNIhIbqnUwaFiEQM@centerbeam.proxy.rlwy.net:57827/railway',
+        default=DATABASE_URL,
         engine='django.db.backends.postgresql'
     )
 }
