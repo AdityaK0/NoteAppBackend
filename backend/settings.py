@@ -65,7 +65,7 @@ REST_FRAMEWORK = {
 from datetime import datetime,timedelta
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),  # Adjust as needed
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=2),  # Adjust as needed
     "REFRESH_TOKEN_LIFETIME": timedelta(hours=24),
     "ROTATE_REFRESH_TOKENS": True,  # when true then every time new access token = new refresh token also
                                      # which helps to extend the refresh token life then if false then 
