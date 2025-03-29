@@ -77,7 +77,6 @@ SIMPLE_JWT = {
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://noteapphub.duckdns.org",
     "https://notepub-8.vercel.app","https://noteapphub.netlify.app","http://localhost:5173", "http://localhost:5174"
 ]
 CORS_ALLOW_HEADERS = [
