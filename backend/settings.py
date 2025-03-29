@@ -77,7 +77,7 @@ SIMPLE_JWT = {
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173", "http://localhost:5174" 
+    "https://noteapphub.netlify.app","http://localhost:5173", "http://localhost:5174"
 ]
 CORS_ALLOW_HEADERS = [
     "accept",
@@ -129,14 +129,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASE_URL = os.getenv('DATABASE_URL')
-
+print(DATABASE_URL)
     
 DATABASES = {
     'default': dj_database_url.config(
         default=DATABASE_URL,
         engine='django.db.backends.postgresql',
-         ssl_require=True ,
-          conn_max_age=600,
     )
 }
 
