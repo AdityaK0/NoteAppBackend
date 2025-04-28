@@ -15,7 +15,7 @@ def home(request):
 @permission_classes([IsAuthenticated])
 def allList(request):
     try:
-        all_notes = Notes.objects.all().filter(user=request.user).order_by('-ispinned')
+        all_notes = Notes.objects.filter(user=request.user).order_by('-ispinned')
         serialized_notes = NotesSerializers(all_notes, many=True) 
         
         return Response(
@@ -99,11 +99,14 @@ def search_notes(request):
     try:
         if len(str(request.GET.get("query")).strip())>0:
             querry = request.GET.get("query")
-            data = Notes.objects.filter(user=request.user).filter(
+            
+            data = Notes.objects.filter( Q(user=request.user) &
                 Q(title__icontains = querry) | Q( description__icontains = querry) | Q(category__icontains = querry)
             ).order_by("-ispinned").values()
+            
             serializer = NotesSerializers(data,many=True)
             return Response({"all_notes":serializer.data},status=status.HTTP_200_OK)
         return Response({"error":"Search Querry is required"},status=status.HTTP_400_BAD_REQUEST)
+    
     except Exception as e:
         return Response({"error":f"Note not found {e}"},status=status.HTTP_404_NOT_FOUND) 
