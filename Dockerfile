@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 # Set the working directory inside the container
 WORKDIR /backend
@@ -21,4 +21,5 @@ ENV PYTHONUNBUFFERED 1
 EXPOSE 8000
 
 # Command to run when the container starts
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "manage:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "backend.wsgi:application"]
+
