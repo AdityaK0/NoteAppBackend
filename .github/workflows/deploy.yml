@@ -24,7 +24,7 @@ jobs:
           cd ~/NoteAppBackend || exit
           git pull origin main || exit
           pip install -r requirements.txt || exit
-          sudo systemctl restart gunicorn || exit
+          sudo supervisorctl restart guni:gunicorn || exit
           sudo systemctl restart nginx || exit
         EOF
 
