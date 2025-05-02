@@ -21,10 +21,9 @@ jobs:
     - name: Deploy on EC2
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@13.202.214.73 << 'EOF'
+          source new_env/bin/activate || exit
           cd ~/NoteAppBackend || exit
           git pull origin main || exit
-          cd .. || exit
-          source new_env/bin/activate || exit
           pip install -r requirements.txt || exit
           deactivate || exit
           sudo supervisorctl restart guni:gunicorn || exit
