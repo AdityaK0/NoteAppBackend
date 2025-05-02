@@ -1,0 +1,27 @@
+name: Deploy Django Backend to AWS
+
+on:
+  push:
+    branches:
+      - main  # or any other branch you want to trigger the deploy on
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up SSH key
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  # This is the secret you added
+
+    - name: SSH into EC2 and deploy
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.HOST }} << 'EOF'
+          cd ~/NoteAppBackend || exit
+          git pull origin main || exit
+          docker-compose up -d --build || exit
+        EOF
