@@ -3,7 +3,7 @@ from .models import Notes
 
 
 class NotesSerializers(ModelSerializer):
-    user = ReadOnlyField(source="user.id")  # ✅ Explicitly include `user`
+    user = ReadOnlyField(source="user.id")  
     username = ReadOnlyField(source="user.username")
     class Meta:
         model = Notes
