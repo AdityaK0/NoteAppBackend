@@ -8,7 +8,6 @@ from .utils import clear_user_notes_cache
 
 @receiver(post_save, sender=Notes)
 def create_user_profile(sender, instance, created, **kwargs):
-    if created:
         clear_user_notes_cache(instance.user.id)
         print("RESETING CACHE VALUES ::::: ")
         
