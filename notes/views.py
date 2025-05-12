@@ -16,13 +16,13 @@ def home(request):
 @permission_classes([IsAuthenticated])
 def allList(request):
     try:
-        cache_notes = cache.get(f"notes-{request.user.id}")
-        if cache_notes:
-            print("Value Came from Cache")      
-            return Response(
-                {"message": "All Data", "all_notes": cache_notes},  
-                status=status.HTTP_200_OK
-            )
+        # cache_notes = cache.get(f"notes-{request.user.id}")
+        # if cache_notes:
+        #     print("Value Came from Cache")      
+        #     return Response(
+        #         {"message": "All Data", "all_notes": cache_notes},  
+        #         status=status.HTTP_200_OK
+        #     )
         print("Really Came -------------------")    
         all_notes = Notes.objects.filter(user=request.user).order_by('-ispinned')
         serialized_notes = NotesSerializers(all_notes, many=True) 
