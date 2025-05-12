@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save,post_delete
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from .models import Notes
@@ -12,7 +12,8 @@ def create_user_profile(sender, instance, created, **kwargs):
         clear_user_notes_cache(instance.user.id)
         print("RESETING CACHE VALUES ::::: ")
         
-        # val = cache.get('book_data')
-        # if val:
-        #     cache.delete('book_data')
-        #     print("CACHE VALUE RESETTED ::::: ")
+@receiver(post_delete, sender=Notes)
+def clear_notes_cache_on_delete(sender, instance, **kwargs):
+    # Called when a note is deleted
+    clear_user_notes_cache(instance.user.id)
+    print("CACHE CLEARED on DELETE")
