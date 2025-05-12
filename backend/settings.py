@@ -174,6 +174,9 @@ USE_I18N = True
 USE_TZ = True
 
 
+
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -192,3 +195,14 @@ STATICFILES_DIRS =[
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "users.CustomUser"  
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION":os.getenv('LOCATION'),        
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
