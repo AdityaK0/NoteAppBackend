@@ -118,11 +118,13 @@ def logout(request):
          return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_user(request):
     try:
         if request.user:
+            # if cache_user = 
             serializer = CustomUserSerializer(request.user)
             excluded_data = {}
             for key,val in serializer.data.items():
