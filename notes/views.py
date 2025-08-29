@@ -16,19 +16,31 @@ def home(request):
 @permission_classes([IsAuthenticated])
 def allList(request):
     try:
-        cache_notes = cache.get(f"notes-{request.user.id}")
+        cache_key = f"notes-{request.user.id}"
+        cache_notes = None
+
+        try:
+            cache_notes = cache.get(cache_key)
+        except Exception as e:
+            print("Cache unavailable on GET:", e)
+
         if cache_notes:
             print("Value Came from Cache")      
             return Response(
                 {"message": "All Data", "all_notes": cache_notes},  
                 status=status.HTTP_200_OK
             )
-        print("Really Came -------------------")    
+
+        print("Cache miss / cache down → querying DB")
         all_notes = Notes.objects.filter(user=request.user).order_by('-ispinned')
         serialized_notes = NotesSerializers(all_notes, many=True) 
-        cache.set(f"notes-{request.user.id}",serialized_notes.data,timeout=86400)
-        print("Value Added in Cache")
-        
+
+        try:
+            cache.set(cache_key, serialized_notes.data, timeout=86400)
+            print("Value Added in Cache")
+        except Exception as e:
+            print("Cache unavailable on SET:", e)
+
         return Response(
             {"message": "All Data", "all_notes": serialized_notes.data},  
             status=status.HTTP_200_OK
@@ -38,6 +50,34 @@ def allList(request):
             {"error": str(e)},  
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+# @api_view(["GET"])
+# @permission_classes([IsAuthenticated])
+# def allList(request):
+#     try:
+#         cache_notes = cache.get(f"notes-{request.user.id}")
+#         if cache_notes:
+#             print("Value Came from Cache")      
+#             return Response(
+#                 {"message": "All Data", "all_notes": cache_notes},  
+#                 status=status.HTTP_200_OK
+#             )
+#         print("Really Came -------------------")    
+#         all_notes = Notes.objects.filter(user=request.user).order_by('-ispinned')
+#         serialized_notes = NotesSerializers(all_notes, many=True) 
+#         cache.set(f"notes-{request.user.id}",serialized_notes.data,timeout=86400)
+#         print("Value Added in Cache")
+        
+#         return Response(
+#             {"message": "All Data", "all_notes": serialized_notes.data},  
+#             status=status.HTTP_200_OK
+#         )
+#     except Exception as e:
+#         return Response(
+#             {"error": str(e)},  
+#             status=status.HTTP_500_INTERNAL_SERVER_ERROR
+#         )
 
 
 @api_view(["POST"])
