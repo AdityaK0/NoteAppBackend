@@ -151,9 +151,18 @@ def search_notes(request):
         if len(str(request.GET.get("query")).strip())>0:
             querry = request.GET.get("query")
             
-            data = Notes.objects.filter( Q(user=request.user) &
-                Q(title__icontains = querry) | Q( description__icontains = querry) | Q(category__icontains = querry)
-            ).order_by("-ispinned").values()
+            # data = Notes.objects.filter( Q(user=request.user) &
+            #     Q(title__icontains = querry) | Q( description__icontains = querry) | Q(category__icontains = querry)
+            # ).order_by("-ispinned").values()
+            
+            data = Notes.objects.filter(
+            Q(user=request.user) & (
+                Q(title__icontains=querry) |
+                Q(description__icontains=querry) |
+                Q(category__icontains=querry)
+            )
+        ).order_by("-ispinned").values()
+
             
             serializer = NotesSerializers(data,many=True)
             return Response({"all_notes":serializer.data},status=status.HTTP_200_OK)
