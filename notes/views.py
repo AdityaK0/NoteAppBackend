@@ -122,6 +122,7 @@ def update_note(request,id):
 @api_view(["PUT","PATCH"])
 @permission_classes([IsAuthenticated])
 def pin_note(request,id):
+    
     try:
        note = Notes.objects.get(id=id,user=request.user)
        serializer = NotesSerializers(note,data=request.data,partial=True)
