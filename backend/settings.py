@@ -77,12 +77,25 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 
 if DATABASE_URL and not DEBUG:
     # Production: Use PostgreSQL
+    # DATABASES = { cloud DB to local Db
+    #     'default': dj_database_url.config(
+    #         default=DATABASE_URL,
+    #         conn_max_age=600
+    #     )
+    # }
     DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600
-        )
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "notestudio",
+        "USER": "notestudio_user",
+        "PASSWORD": "strongpassword",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
+        }
     }
+
+
+
 else:
     # Local development: Use SQLite
     DATABASES = {
