@@ -5,6 +5,7 @@ from .models import Notes
 class NotesSerializers(ModelSerializer):
     user = ReadOnlyField(source="user.id")  
     username = ReadOnlyField(source="user.username")
+    fullname = ReadOnlyField(source="user.fullname")
     class Meta:
         model = Notes
         fields = [  
@@ -20,7 +21,8 @@ class NotesSerializers(ModelSerializer):
             "created_at",
             "updated_at",
             "user",  
-            "username"
+            "username",
+            "fullname"
         ]
 
     def create(self, validated_data):
