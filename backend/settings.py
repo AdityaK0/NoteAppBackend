@@ -8,7 +8,7 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+DB_MODE = os.getenv("DB_MODE", "local")
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-for-dev')
 
@@ -74,37 +74,35 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # For local development, we'll use SQLite
 # For production, uncomment DATABASE_URL in your .env file
 DATABASE_URL = os.getenv('DATABASE_URL')
-
-if DATABASE_URL and not DEBUG:
-    # Production: Use PostgreSQL
-    # DATABASES = { cloud DB to local Db
-    #     'default': dj_database_url.config(
-    #         default=DATABASE_URL,
-    #         conn_max_age=600
-    #     )
-    # }
+if DB_MODE == "sqlite":
     DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "notestudio",
-        "USER": "notestudio_user",
-        "PASSWORD": "strongpassword",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
 
-
-
-else:
-    # Local development: Use SQLite
+elif DB_MODE == "neon":
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+        "default": dj_database_url.config(
+            default=os.getenv("DATABASE_URL"),
+            conn_max_age=600,
+            ssl_require=True,
+        )
     }
 
+else:  # local postgres (EC2 default)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "notestudio",
+            "USER": "notestudio_user",
+            "PASSWORD": "strongpassword",
+            "HOST": "127.0.0.1",
+            "PORT": "5432",
+            "CONN_MAX_AGE": 300,
+        }
+    }
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
