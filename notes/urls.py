@@ -11,4 +11,7 @@ urlpatterns = [
     path('api/v1/notes/delete/<int:id>/',delete_note),
     path('api/v1/notes/pin-note/<int:id>/',pin_note),
     path('api/v1/notes/search-notes/',search_notes),
+    path('api/v1/notes/share/toggle/<int:id>/', toggle_sharing),
+    path('api/v1/notes/public/<str:share_token>/', get_public_note),
+    path('api/v1/notes/toggle-completion/<int:id>/', toggle_completion),
 ]

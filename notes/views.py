@@ -171,5 +171,43 @@ def search_notes(request):
     
     except Exception as e:
         return Response({"error":f"Note not found {e}"},status=status.HTTP_404_NOT_FOUND) 
-    
+
+@api_view(["GET"])
+@permission_classes([]) # Publicly accessible
+def get_public_note(request, share_token):
+    try:
+        note = Notes.objects.get(share_token=share_token, is_public=True)
+        serializer = NotesSerializers(note)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Notes.DoesNotExist:
+        return Response({"error": "Note is not public or does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def toggle_sharing(request, id):
+    try:
+        note = Notes.objects.get(id=id, user=request.user)
+        note.is_public = not note.is_public
+        note.save()
+        return Response({
+            "is_public": note.is_public,
+            "share_token": str(note.share_token),
+            "message": "Sharing status updated"
+        }, status=status.HTTP_200_OK)
+    except Notes.DoesNotExist:
+        return Response({"error": "Note not found"}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def toggle_completion(request, id):
+    try:
+        note = Notes.objects.get(id=id, user=request.user)
+        note.is_completed = not note.is_completed
+        note.save()
+        return Response({
+            "is_completed": note.is_completed,
+            "message": "Completion status updated"
+        }, status=status.HTTP_200_OK)
+    except Notes.DoesNotExist:
+        return Response({"error": "Note not found"}, status=status.HTTP_404_NOT_FOUND)
 
