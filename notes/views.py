@@ -16,30 +16,30 @@ def home(request):
 @permission_classes([IsAuthenticated])
 def allList(request):
     try:
-        cache_key = f"notes-{request.user.id}"
-        cache_notes = None
+        # cache_key = f"notes-{request.user.id}"
+        # cache_notes = None
 
-        try:
-            cache_notes = cache.get(cache_key)
-        except Exception as e:
-            print("Cache unavailable on GET:", e)
+        # try:
+        #     cache_notes = cache.get(cache_key)
+        # except Exception as e:
+        #     print("Cache unavailable on GET:", e)
 
-        if cache_notes:
-            print("Value Came from Cache")      
-            return Response(
-                {"message": "All Data", "all_notes": cache_notes},  
-                status=status.HTTP_200_OK
-            )
+        # if cache_notes:
+        #     print("Value Came from Cache")      
+        #     return Response(
+        #         {"message": "All Data", "all_notes": cache_notes},  
+        #         status=status.HTTP_200_OK
+        #     )
 
-        print("Cache miss / cache down → querying DB")
+        # print("Cache miss / cache down → querying DB")
         all_notes = Notes.objects.filter(user=request.user).order_by('-ispinned')
         serialized_notes = NotesSerializers(all_notes, many=True) 
 
-        try:
-            cache.set(cache_key, serialized_notes.data, timeout=86400)
-            print("Value Added in Cache")
-        except Exception as e:
-            print("Cache unavailable on SET:", e)
+        # try:
+        #     cache.set(cache_key, serialized_notes.data, timeout=86400)
+        #     print("Value Added in Cache")
+        # except Exception as e:
+        #     print("Cache unavailable on SET:", e)
 
         return Response(
             {"message": "All Data", "all_notes": serialized_notes.data},  
