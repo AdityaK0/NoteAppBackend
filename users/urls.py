@@ -7,6 +7,5 @@ urlpatterns = [
     path("logout/",logout),
     path("get-user/",get_user),
     path("protectedAPI/",protectedView.as_view()),
-
 ]
 
