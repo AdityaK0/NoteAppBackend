@@ -1,32 +1,35 @@
-name: Deploy to EC2 (Manual Setup)
 
-on:
-  push:
-    branches:
-      - main
+# as we dont have money to pay for EC2 so right now we have removed the backend Ec2 instance
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+# name: Deploy to EC2 (Manual Setup)
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+# on:
+#   push:
+#     branches:
+#       - main
 
-    - name: Setup SSH
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
 
-    - name: Deploy on EC2
-      run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@13.202.214.73 << 'EOF'
-          source new_env/bin/activate || exit
-          cd ~/NoteAppBackend || exit
-          git pull origin main || exit
-          pip install -r requirements.txt || exit
-          deactivate || exit
-          sudo supervisorctl restart guni:gunicorn || exit
-          sudo systemctl restart nginx || exit
-        EOF
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: Setup SSH
+#       uses: webfactory/ssh-agent@v0.9.0
+#       with:
+#         ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+#     - name: Deploy on EC2
+#       run: |
+#         ssh -o StrictHostKeyChecking=no ubuntu@13.202.214.73 << 'EOF'
+#           source new_env/bin/activate || exit
+#           cd ~/NoteAppBackend || exit
+#           git pull origin main || exit
+#           pip install -r requirements.txt || exit
+#           deactivate || exit
+#           sudo supervisorctl restart guni:gunicorn || exit
+#           sudo systemctl restart nginx || exit
+#         EOF
 
