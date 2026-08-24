@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
+    path('metrics/', include('django_prometheus.urls')),    
     path('admin/', admin.site.urls),
     path('',include('notes.urls')),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

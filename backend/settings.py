@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'django_prometheus',
     
     # Local apps
     'users.apps.UsersConfig',
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Only needed in production
@@ -48,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ROOT_URLCONF = 'backend.urls'
